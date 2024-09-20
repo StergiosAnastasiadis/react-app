@@ -1,4 +1,4 @@
-name: Express App CI
+name: React App CI
 on:
   push:
     branches: [main]
