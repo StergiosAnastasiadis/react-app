@@ -1,15 +1,17 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as build
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 RUN npm install --omit=dev
 
-COPY . .
+COPY --chown=node:node . .
 RUN npm run build
 
-USER node
+# USER node
 
-CMD [ "npm", "start"]
-
-EXPOSE 8000
+FROM nginx:latest
+ 
+COPY --from=build app/build /usr/share/nginx/html
+ 
+EXPOSE 80
